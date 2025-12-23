@@ -1,0 +1,282 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #333;
+    background: #f8f9fa;
+}
+
+.container {
+    width: 450px;
+    max-height: 600px;
+    overflow-y: auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 8px 8px 0 0;
+}
+
+header h1 {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.controls {
+    display: flex;
+    gap: 8px;
+}
+
+.btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-primary:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.status-bar {
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    padding: 8px 16px;
+    font-size: 12px;
+    color: #6c757d;
+    text-align: center;
+    border-radius: 0 0 8px 8px;
+    position: sticky;
+    bottom: 0;
+    backdrop-filter: blur(10px);
+    background: rgba(248, 249, 250, 0.95);
+}
+
+.filters {
+    padding: 16px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.search-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+}
+
+.filter-checkboxes {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    flex: 1;
+    min-width: 120px;
+}
+
+.filter-group h4 {
+    font-size: 12px;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #495057;
+    transition: color 0.2s ease;
+}
+
+.checkbox-label:hover {
+    color: #667eea;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    accent-color: #667eea;
+    cursor: pointer;
+}
+
+.checkbox-label span {
+    user-select: none;
+}
+
+.loading {
+    text-align: center;
+    padding: 32px;
+    color: #6c757d;
+}
+
+.error {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 12px 16px;
+    margin: 16px;
+    border-radius: 4px;
+    border: 1px solid #f5c6cb;
+}
+
+.cookie-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.cookie-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e9ecef;
+    transition: background-color 0.2s ease;
+}
+
+.cookie-item:hover {
+    background: #f8f9fa;
+}
+
+.cookie-item:last-child {
+    border-bottom: none;
+}
+
+.cookie-name {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cookie-badges {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.badge {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80px;
+    min-width: fit-content;
+    display: inline-block;
+    text-align: center;
+}
+
+.badge-httponly {
+    background: #dc3545;
+    color: white;
+}
+
+.badge-secure {
+    background: #28a745;
+    color: white;
+}
+
+.badge-samesite {
+    background: #17a2b8;
+    color: white;
+}
+
+.cookie-value {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 12px;
+    color: #000000;
+    background: #cee2f6;
+    padding: 6px 8px;
+    border-radius: 4px;
+    margin: 6px 0;
+    word-break: break-all;
+    max-height: 60px;
+    overflow-y: auto;
+}
+
+.cookie-details {
+    font-size: 11px;
+    color: #6c757d;
+    margin-top: 6px;
+}
+
+.cookie-details span {
+    margin-right: 12px;
+}
+
+.no-cookies {
+    text-align: center;
+    padding: 32px;
+    color: #6c757d;
+}
+
+.no-cookies p {
+    font-size: 16px;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}

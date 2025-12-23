@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Viewer</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🍪 Cookie Viewer</h1>
+            <div class="controls">
+                <button id="refreshBtn" class="btn btn-primary">Refresh</button>
+                <button id="clearBtn" class="btn btn-secondary">Clear All</button>
+            </div>
+        </header>
+        
+
+        <div class="filters">
+            <input type="text" id="searchInput" placeholder="Search cookies..." class="search-input">
+            <div class="filter-checkboxes">
+                <div class="filter-group">
+                    <h4>Cookie Types</h4>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="filterHttpOnly" value="httpOnly">
+                        <span>HTTP-Only</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="filterSecure" value="secure">
+                        <span>Secure</span>
+                    </label>
+                </div>
+                <div class="filter-group">
+                    <h4>Duration</h4>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="filterSession" value="session">
+                        <span>Session</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="filterPersistent" value="persistent">
+                        <span>Persistent</span>
+                    </label>
+                </div>
+                <div class="filter-group">
+                    <h4>SameSite</h4>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="filterSameSiteNone" value="sameSiteNone">
+                        <span>None</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="filterSameSiteLax" value="sameSiteLax">
+                        <span>Lax</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="filterSameSiteStrict" value="sameSiteStrict">
+                        <span>Strict</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="filterNoSameSite" value="noSameSite">
+                        <span>No SameSite</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div id="loading" class="loading">Loading cookies...</div>
+        <div id="error" class="error" style="display: none;"></div>
+        
+        <div id="cookieList" class="cookie-list"></div>
+        
+        <div id="noCookies" class="no-cookies" style="display: none;">
+            <p>No cookies found for this domain.</p>
+        </div>
+        
+        <div class="status-bar">
+            <span id="statusText">0 cookies</span>
+        </div>
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html>
