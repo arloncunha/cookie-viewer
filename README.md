@@ -1,134 +1,217 @@
 # Cookie Viewer Chrome Extension
 
-A Chrome extension that can view all cookies for any website, including HTTP-only cookies that are normally inaccessible to regular JavaScript.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-blue.svg)](https://developer.chrome.com/docs/extensions/)
+[![Manifest V3](https://img.shields.io/badge/Manifest-V3-green.svg)](https://developer.chrome.com/docs/extensions/mv3/intro/)
 
-## Features
+A powerful Chrome extension that provides comprehensive cookie viewing and management capabilities for any website, including access to HTTP-only cookies that are normally inaccessible to regular JavaScript.
 
-- **View All Cookies**: Access both regular and HTTP-only cookies using Chrome's extension APIs
-- **Real-time Updates**: Monitor cookie changes as they happen
-- **Advanced Filtering**: Filter cookies by type (HTTP-only, secure, regular)
-- **Search Functionality**: Search through cookies by name, value, or domain
-- **Cookie Management**: Clear individual or all cookies for a domain
-- **Detailed Information**: View cookie properties including domain, path, expiration, and security flags
-- **Clean Interface**: Modern, responsive UI with intuitive design
+![Cookie Viewer Extension](image.png)
 
-## Key Capabilities
+## 🚀 Quick Start
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/arloncunha/cookie-viewer.git
+   cd cookie-viewer
+   ```
+
+2. **Install the extension**
+   - Open Chrome and navigate to `chrome://extensions/`
+   - Enable "Developer mode" (toggle in top right)
+   - Click "Load unpacked" and select the `extension` folder
+   - The Cookie Viewer extension will appear in your toolbar
+
+3. **Start using**
+   - Navigate to any website
+   - Click the Cookie Viewer extension icon
+   - Explore all cookies for the current domain
+
+## ✨ Features
+
+### Core Functionality
+- 🍪 **Complete Cookie Access** - View both regular and HTTP-only cookies using Chrome's extension APIs
+- 🔄 **Real-time Updates** - Monitor cookie changes as they happen on the page
+- 🔍 **Advanced Search** - Search through cookies by name, value, or domain with instant filtering
+- 🎛️ **Smart Filtering** - Filter cookies by type (HTTP-only, secure, session, persistent)
+- 🗑️ **Cookie Management** - Clear individual cookies or all cookies for a domain
+- 📊 **Detailed Properties** - View comprehensive cookie information including security flags
+
+### User Experience
+- 🎨 **Modern Interface** - Clean, responsive UI with intuitive design
+- ⚡ **Fast Performance** - Optimized for quick loading and smooth interactions
+- 📱 **Responsive Design** - Works seamlessly across different screen sizes
+- 🔒 **Privacy-First** - All data processing happens locally, nothing sent to external servers
+
+## 🔧 Technical Capabilities
 
 ### HTTP-Only Cookie Access
-Unlike regular web pages, this extension can access HTTP-only cookies through Chrome's `chrome.cookies` API. This is particularly useful for:
-- Security analysis
-- Development and debugging
-- Understanding website cookie behavior
-- Cookie auditing
+Unlike regular web pages, this extension leverages Chrome's `chrome.cookies` API to access HTTP-only cookies, making it invaluable for:
 
-### Cookie Properties Displayed
-- Cookie name and value
-- Domain and path
-- Expiration date
-- Security flags (HTTP-only, Secure, SameSite)
-- Real-time statistics
+- **Security Analysis** - Audit cookie security configurations
+- **Development & Debugging** - Inspect cookie behavior during development
+- **Privacy Research** - Understand how websites handle sensitive data
+- **Cookie Compliance** - Verify cookie policies and implementations
 
-## Installation
+### Cookie Information Displayed
+| Property | Description |
+|----------|-------------|
+| Name & Value | Cookie identifier and stored data |
+| Domain & Path | Scope of cookie accessibility |
+| Expiration | Session or persistent with expiry date |
+| Security Flags | HTTP-only, Secure, SameSite attributes |
+| Size | Cookie size in bytes |
+| Creation Time | When the cookie was first set |
 
-### From Source (Developer Mode)
+## 📋 Usage Guide
 
-1. Clone or download this repository
-2. Open Chrome and navigate to `chrome://extensions/`
-3. Enable "Developer mode" in the top right corner
-4. Click "Load unpacked" and select the `extension` folder from the repository
-5. The Cookie Viewer extension will appear in your extensions list
+### Basic Operations
+1. **View Cookies** - Click the extension icon to see all cookies for the current site
+2. **Search** - Use the search bar to find specific cookies by name, value, or domain
+3. **Filter** - Select filter options to show only HTTP-only, secure, or session cookies
+4. **Refresh** - Click refresh to update the cookie list with current data
+5. **Clear** - Remove individual cookies or clear all cookies for the domain
 
-### Usage
+### Advanced Features
+- **Export Data** - Copy cookie information for external analysis
+- **Cookie Statistics** - View summary statistics for the current domain
+- **Security Audit** - Identify potentially insecure cookie configurations
 
-1. Navigate to any website
-2. Click the Cookie Viewer extension icon in the toolbar
-3. View all cookies for the current domain
-4. Use the search bar to find specific cookies
-5. Filter cookies by type using the dropdown menu
-6. Click "Refresh" to update the cookie list
-7. Click "Clear All" to remove all cookies for the domain
-
-## Icon Design
-
-The extension features a custom cookie icon that represents its functionality:
-
-- **Design**: A stylized cookie icon with a clean, modern appearance
-- **Format**: Available in multiple sizes (16x16, 48x48, 128x128 pixels) as PNG files
-- **Source**: Original SVG source file (`cookie-icon.svg`) included for customization
-- **Usage**: Displayed in the Chrome toolbar and extension management pages
-
-The icon is designed to be easily recognizable and clearly communicate the extension's purpose of cookie management and analysis.
-
-## Files Structure
+## 🏗️ Project Structure
 
 ```
 cookie-viewer/
-├── extension/            # Extension source code
-│   ├── manifest.json     # Extension configuration
-│   ├── popup.html        # Extension popup interface
-│   ├── popup.css         # Styling for the popup
-│   ├── popup.js          # Main popup functionality
-│   ├── background.js     # Background service worker
-│   ├── content.js        # Content script for web pages
-│   ├── cookie-icon.svg   # Cookie icon source (SVG format)
-│   ├── icon16.png        # 16x16 extension icon
-│   ├── icon48.png        # 48x48 extension icon
-│   └── icon128.png       # 128x128 extension icon
-├── test_extension.js     # Extension testing utilities
-├── LICENSE               # MIT License file
-└── README.md             # This file
+├── extension/                 # Extension source code
+│   ├── manifest.json         # Extension configuration (Manifest V3)
+│   ├── popup.html           # Main popup interface
+│   ├── popup.css            # Styling and responsive design
+│   ├── popup.js             # Core popup functionality
+│   ├── background.js        # Service worker for background tasks
+│   ├── content.js           # Content script for page interaction
+│   ├── cookie-icon.svg      # Vector icon source
+│   ├── icon16.png          # 16x16 toolbar icon
+│   ├── icon48.png          # 48x48 management page icon
+│   └── icon128.png         # 128x128 Chrome Web Store icon
+├── test_extension.js        # Extension testing utilities
+├── test_extension_functionality.js  # Functionality tests
+├── .gitignore              # Git ignore rules
+├── LICENSE                 # MIT License
+├── image.png              # README screenshot
+└── README.md              # This documentation
 ```
 
-## Technical Details
+## ⚙️ Technical Specifications
 
-### Permissions Required
-- `cookies`: Access to Chrome's cookie API
-- `activeTab`: Access to the current active tab
-- `storage`: Store extension settings
-- `<all_urls>`: Access cookies from all domains
+### Required Permissions
+| Permission | Purpose |
+|------------|---------|
+| `cookies` | Access Chrome's cookie API for reading/writing cookies |
+| `activeTab` | Get information about the currently active tab |
+| `storage` | Store extension settings and preferences locally |
+| `tabs` | Access tab information for cookie domain matching |
+| `<all_urls>` | Access cookies from all domains (via host_permissions) |
 
-### Architecture
-- **Manifest V3**: Uses the latest Chrome extension manifest version
-- **Service Worker**: Background script for cookie management
-- **Content Script**: Monitors cookie changes on web pages
-- **Popup Interface**: User-friendly interface for cookie viewing
+### Architecture Overview
+- **Manifest V3** - Built with the latest Chrome extension standards
+- **Service Worker** - Efficient background processing for cookie operations
+- **Content Scripts** - Monitor and respond to cookie changes on web pages
+- **Popup Interface** - Responsive UI built with vanilla HTML/CSS/JavaScript
+- **Local Storage** - All data stored locally using Chrome's storage API
+
+### Browser Compatibility
+- ✅ **Chrome 88+** (Manifest V3 support required)
+- ✅ **Microsoft Edge 88+** (Chromium-based)
+- ✅ **Brave Browser** (Chromium-based)
+- ✅ **Other Chromium browsers** with extension support
+
+## 🔒 Security & Privacy
+
+### Privacy Commitment
+This extension is designed with privacy as a core principle:
+
+- ❌ **No Data Transmission** - Cookie data never leaves your browser
+- ❌ **No Tracking** - Extension doesn't track user behavior or collect analytics
+- ❌ **No External Requests** - All processing happens locally
+- ✅ **Local Storage Only** - Settings stored using Chrome's secure storage API
+- ✅ **On-Demand Access** - Cookies only accessed when extension is actively used
 
 ### Security Considerations
-This extension requires broad permissions to access cookies from all websites. It's designed for legitimate use cases such as:
-- Web development and debugging
-- Security research and analysis
-- Cookie behavior understanding
-- Privacy auditing
+The extension requires broad permissions to function effectively. These permissions are used exclusively for:
 
-## Browser Compatibility
+- **Legitimate Development** - Web development and debugging workflows
+- **Security Research** - Authorized security analysis and auditing
+- **Educational Purposes** - Learning about web security and cookie behavior
+- **Privacy Auditing** - Understanding website data collection practices
 
-- Chrome 88+ (Manifest V3 support required)
-- Chromium-based browsers with extension support
+## 🛠️ Development
 
-## Privacy
+### Local Development
+```bash
+# Clone the repository
+git clone https://github.com/arloncunha/cookie-viewer.git
+cd cookie-viewer
 
-This extension:
-- Does not transmit any cookie data to external servers
-- Stores settings locally using Chrome's storage API
-- Only accesses cookies when actively used
-- Does not track user behavior
+# Load extension in Chrome
+# 1. Open chrome://extensions/
+# 2. Enable Developer mode
+# 3. Click "Load unpacked"
+# 4. Select the 'extension' folder
+```
 
-## Development
+### Testing
+```bash
+# Run extension functionality tests
+node test_extension_functionality.js
 
-### Building from Source
-No build process required - this is a pure JavaScript extension.
+# Manual testing checklist:
+# - Test on various websites
+# - Verify HTTP-only cookie detection
+# - Test search and filter functionality
+# - Verify cookie clearing operations
+```
 
 ### Contributing
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+We welcome contributions! Please follow these steps:
 
-## License
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
+3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
+4. **Push** to the branch (`git push origin feature/amazing-feature`)
+5. **Open** a Pull Request
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+### Code Style
+- Use consistent indentation (2 spaces)
+- Follow JavaScript ES6+ standards
+- Add comments for complex functionality
+- Ensure responsive CSS design
+- Test across different screen sizes
 
-## Disclaimer
+## 📄 License
 
-This tool is intended for legitimate purposes such as web development, security research, and educational use. Users are responsible for ensuring their use complies with applicable laws, website terms of service, and privacy policies.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for complete details.
+
+## ⚠️ Disclaimer
+
+This tool is intended for legitimate purposes including:
+- Web development and debugging
+- Security research and analysis
+- Educational and learning purposes
+- Privacy auditing and compliance
+
+**Important**: Users are responsible for ensuring their use complies with:
+- Applicable laws and regulations
+- Website terms of service
+- Privacy policies and data protection requirements
+- Ethical guidelines for security research
+
+## 🤝 Support
+
+- **Issues**: Report bugs or request features via [GitHub Issues](https://github.com/arloncunha/cookie-viewer/issues)
+- **Documentation**: Comprehensive guides available in this README
+- **Community**: Join discussions in the repository's discussion section
+
+---
+
+<div align="center">
+  <strong>Built with ❤️ for the web development community</strong>
+</div>
