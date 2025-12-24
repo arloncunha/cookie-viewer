@@ -51,27 +51,6 @@ Your organization may have restrictions on GitHub Actions.
 - Ensure the repository has permission to use GitHub Actions
 - Check if third-party actions are allowed
 
-#### 5. Use Alternative Workflow
-If the above solutions don't work, use the alternative workflow that uses GitHub CLI instead of the action:
-
-**Solution:**
-1. Rename or disable the current workflow:
-   ```bash
-   mv .github/workflows/build-and-sign.yml .github/workflows/build-and-sign.yml.disabled
-   ```
-
-2. Use the alternative workflow:
-   ```bash
-   mv .github/workflows/release-alternative.yml .github/workflows/build-and-sign.yml
-   ```
-
-3. The alternative workflow uses GitHub CLI which has better permission handling
-
-4. You can also trigger it manually:
-   - Go to Actions tab in your repository
-   - Select "Chrome Extension Release (Alternative)"
-   - Click "Run workflow"
-   - Enter the tag version (e.g., v1.0.0)
 
 ### CRX Signing Failed
 
@@ -289,13 +268,7 @@ If you need to retry a failed release:
 
 2. **Fix the issue** (permissions, secrets, etc.)
 
-3. **Try the alternative workflow first**:
-   - Go to Actions tab → "Chrome Extension Release (Alternative)"
-   - Click "Run workflow"
-   - Enter tag: v1.0.0
-   - Click "Run workflow"
-
-4. **Or recreate and push the tag**:
+3. **Recreate and push the tag**:
    ```bash
    git tag v1.0.0
    git push origin v1.0.0
@@ -303,31 +276,6 @@ If you need to retry a failed release:
 
 5. **Monitor the workflow** in the Actions tab
 
-## 🆘 Alternative Workflow Usage
-
-If you're experiencing persistent permission issues, use the alternative workflow:
-
-### Manual Trigger Method
-1. Go to your repository's Actions tab
-2. Select "Chrome Extension Release (Alternative)"
-3. Click "Run workflow"
-4. Enter the tag version (e.g., v1.0.0)
-5. Click "Run workflow"
-
-### Automatic Trigger Method
-The alternative workflow also triggers on tag pushes:
-```bash
-git tag v1.0.0
-git push origin v1.0.0
-```
-
-### Benefits of Alternative Workflow
-- ✅ Uses GitHub CLI instead of actions (better permissions)
-- ✅ More robust error handling
-- ✅ Continues even if CRX signing fails
-- ✅ Can be triggered manually
-- ✅ Handles existing releases gracefully
-- ✅ Works with default repository permissions
 
 ## 📋 Quick Checklist
 
