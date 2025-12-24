@@ -1,0 +1,185 @@
+name: Chrome Extension Release (Alternative)
+
+on:
+  push:
+    tags: [ 'v*' ]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to create release for'
+        required: true
+        default: 'v1.0.0'
+
+permissions:
+  contents: write
+  actions: read
+  checks: write
+  pull-requests: write
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Get version from manifest
+      id: get-version
+      run: |
+        VERSION=$(jq -r '.version' extension/manifest.json)
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        
+        # For manual dispatch, use input tag, otherwise use pushed tag
+        if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+          TAG_VERSION="${{ github.event.inputs.tag }}"
+        else
+          TAG_VERSION=${GITHUB_REF#refs/tags/}
+        fi
+        echo "tag-version=$TAG_VERSION" >> $GITHUB_OUTPUT
+        
+        echo "Extension version: $VERSION"
+        echo "Tag version: $TAG_VERSION"
+        
+    - name: Create extension package
+      run: |
+        # Create a build directory
+        mkdir -p build
+        
+        # Copy extension files to build directory
+        cp -r extension/* build/
+        
+        # Create a zip file of the extension for distribution with version
+        cd build
+        zip -r ../cookie-viewer-extension-${{ steps.get-version.outputs.version }}.zip .
+        cd ..
+        
+        # Also create a generic named version for compatibility
+        cp cookie-viewer-extension-${{ steps.get-version.outputs.version }}.zip cookie-viewer-extension.zip
+        
+    - name: Sign Chrome Extension (if private key available)
+      continue-on-error: true
+      uses: cardinalby/webext-buildtools-chrome-crx-action@v2
+      with:
+        zipFilePath: 'cookie-viewer-extension.zip'
+        privateKey: ${{ secrets.CHROME_EXTENSION_PRIVATE_KEY }}
+        crxFilePath: 'cookie-viewer-extension-${{ steps.get-version.outputs.version }}.crx'
+        
+    - name: Create generic CRX for compatibility (if signing succeeded)
+      continue-on-error: true
+      run: |
+        if [ -f "cookie-viewer-extension-${{ steps.get-version.outputs.version }}.crx" ]; then
+          cp cookie-viewer-extension-${{ steps.get-version.outputs.version }}.crx cookie-viewer-extension.crx
+          echo "CRX file created successfully"
+        else
+          echo "CRX signing failed or skipped - only ZIP will be available"
+        fi
+        
+    - name: Create Release with GitHub CLI
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Check if release already exists
+        if gh release view "${{ steps.get-version.outputs.tag-version }}" >/dev/null 2>&1; then
+          echo "Release already exists, deleting it first..."
+          gh release delete "${{ steps.get-version.outputs.tag-version }}" --yes
+        fi
+        
+        # Create release notes
+        cat > release_notes.md << 'EOF'
+        ## Cookie Viewer Extension ${{ steps.get-version.outputs.tag-version }}
+        
+        ### 📦 Installation Files
+        - **cookie-viewer-extension-${{ steps.get-version.outputs.version }}.zip** - Unsigned extension package for Chrome Web Store or manual installation
+        EOF
+        
+        # Add CRX info if it exists
+        if [ -f "cookie-viewer-extension-${{ steps.get-version.outputs.version }}.crx" ]; then
+          echo "- **cookie-viewer-extension-${{ steps.get-version.outputs.version }}.crx** - Signed extension file for direct installation" >> release_notes.md
+        fi
+        
+        cat >> release_notes.md << 'EOF'
+        
+        ### 🚀 Installation Instructions
+        
+        #### Method 1: Chrome Web Store (Recommended)
+        Install directly from the Chrome Web Store (if published).
+        
+        #### Method 2: Developer Mode Installation
+        1. Download the `cookie-viewer-extension-${{ steps.get-version.outputs.version }}.zip` file
+        2. Extract the ZIP file to a folder
+        3. Open Chrome and go to `chrome://extensions/`
+        4. Enable "Developer mode" in the top right
+        5. Click "Load unpacked" and select the extracted folder
+        EOF
+        
+        # Add CRX installation method if available
+        if [ -f "cookie-viewer-extension-${{ steps.get-version.outputs.version }}.crx" ]; then
+          cat >> release_notes.md << 'EOF'
+        
+        #### Method 3: Direct CRX Installation
+        1. Download the `cookie-viewer-extension-${{ steps.get-version.outputs.version }}.crx` file
+        2. Open Chrome and go to `chrome://extensions/`
+        3. Enable "Developer mode" in the top right
+        4. Drag and drop the CRX file onto the extensions page
+        EOF
+        fi
+        
+        cat >> release_notes.md << 'EOF'
+        
+        ### 🔧 Extension Features
+        - View and debug cookies for any website
+        - Real-time cookie monitoring
+        - Cookie filtering and search
+        - Export cookie data
+        
+        ---
+        
+        **Version:** ${{ steps.get-version.outputs.version }}  
+        **Build Date:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")  
+        **Commit:** ${{ github.sha }}
+        EOF
+        
+        # Determine if this is a prerelease
+        PRERELEASE=""
+        if [[ "${{ steps.get-version.outputs.tag-version }}" == *"alpha"* ]] || \
+           [[ "${{ steps.get-version.outputs.tag-version }}" == *"beta"* ]] || \
+           [[ "${{ steps.get-version.outputs.tag-version }}" == *"rc"* ]]; then
+          PRERELEASE="--prerelease"
+        fi
+        
+        # Create the release
+        gh release create "${{ steps.get-version.outputs.tag-version }}" \
+          --title "Cookie Viewer Extension ${{ steps.get-version.outputs.tag-version }}" \
+          --notes-file release_notes.md \
+          $PRERELEASE \
+          cookie-viewer-extension-${{ steps.get-version.outputs.version }}.zip
+          
+        # Add CRX file if it exists
+        if [ -f "cookie-viewer-extension-${{ steps.get-version.outputs.version }}.crx" ]; then
+          gh release upload "${{ steps.get-version.outputs.tag-version }}" \
+            cookie-viewer-extension-${{ steps.get-version.outputs.version }}.crx
+        fi
+        
+        echo "✅ Release created successfully!"
+        
+    - name: Upload Extension Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: chrome-extension-artifacts-v${{ steps.get-version.outputs.version }}
+        path: |
+          cookie-viewer-extension*.zip
+          cookie-viewer-extension*.crx
+        retention-days: 30
+        
+    - name: Upload to Chrome Web Store (if configured)
+      if: secrets.CHROME_EXTENSION_ID != ''
+      continue-on-error: true
+      uses: cardinalby/webext-buildtools-chrome-webstore-upload-action@v1
+      with:
+        extensionId: ${{ secrets.CHROME_EXTENSION_ID }}
+        zipFilePath: 'cookie-viewer-extension.zip'
+        apiClientId: ${{ secrets.CHROME_WEBSTORE_CLIENT_ID }}
+        apiClientSecret: ${{ secrets.CHROME_WEBSTORE_CLIENT_SECRET }}
+        apiRefreshToken: ${{ secrets.CHROME_WEBSTORE_REFRESH_TOKEN }}
+        publishTarget: 'draft'
