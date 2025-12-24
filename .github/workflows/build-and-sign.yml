@@ -42,14 +42,12 @@ jobs:
     - name: Sign Chrome Extension
       uses: cardinalby/webext-buildtools-chrome-crx-action@v2
       with:
-        # Path to the extension directory
-        extensionDir: 'build'
+        # Path to the ZIP file of the extension
+        zipFilePath: 'cookie-viewer-extension.zip'
         # Private key for signing (stored as repository secret)
         privateKey: ${{ secrets.CHROME_EXTENSION_PRIVATE_KEY }}
         # Output path for the signed CRX file
         crxFilePath: 'cookie-viewer-extension.crx'
-        # Update manifest for production if needed
-        updateManifest: true
         
     - name: Upload Extension Artifacts
       uses: actions/upload-artifact@v4
