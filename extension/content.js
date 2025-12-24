@@ -3,15 +3,20 @@
 
 class ContentCookieViewer {
     constructor() {
+        this.monitoringInterval = null;
+        this.messageListener = null;
+        this.isContextValid = true;
         this.init();
     }
 
     init() {
         // Listen for messages from popup or background script
-        chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+        this.messageListener = (message, sender, sendResponse) => {
             this.handleMessage(message, sender, sendResponse);
             return true; // Keep message channel open for async responses
-        });
+        };
+        
+        chrome.runtime.onMessage.addListener(this.messageListener);
 
         // Monitor cookie changes on the page
         this.monitorCookieChanges();
@@ -93,7 +98,12 @@ class ContentCookieViewer {
         let lastCookieString = document.cookie;
 
         // Check for cookie changes periodically
-        const checkInterval = setInterval(() => {
+        this.monitoringInterval = setInterval(() => {
+            if (!this.isContextValid) {
+                this.stopMonitoring();
+                return;
+            }
+            
             const currentCookieString = document.cookie;
             
             if (currentCookieString !== lastCookieString) {
@@ -104,20 +114,52 @@ class ContentCookieViewer {
 
         // Clean up interval when page unloads
         window.addEventListener('beforeunload', () => {
-            clearInterval(checkInterval);
+            this.stopMonitoring();
         });
+    }
+
+    stopMonitoring() {
+        this.isContextValid = false;
+        
+        if (this.monitoringInterval) {
+            clearInterval(this.monitoringInterval);
+            this.monitoringInterval = null;
+        }
+        
+        if (this.messageListener) {
+            try {
+                chrome.runtime.onMessage.removeListener(this.messageListener);
+            } catch (error) {
+                // Extension context might already be invalidated
+            }
+            this.messageListener = null;
+        }
+        
+        console.log('Cookie Viewer: Monitoring stopped');
     }
 
     onCookieChange(oldCookies, newCookies) {
         // Notify background script about cookie changes
-        chrome.runtime.sendMessage({
-            action: 'documentCookieChanged',
-            oldCookies: oldCookies,
-            newCookies: newCookies,
-            url: window.location.href
-        }).catch(() => {
-            // Background script might not be ready, ignore error
-        });
+        try {
+            chrome.runtime.sendMessage({
+                action: 'documentCookieChanged',
+                oldCookies: oldCookies,
+                newCookies: newCookies,
+                url: window.location.href
+            }).catch((error) => {
+                // Extension context invalidated or background script not ready
+                if (error.message && error.message.includes('Extension context invalidated')) {
+                    console.log('Cookie Viewer: Extension context invalidated, stopping monitoring');
+                    this.stopMonitoring();
+                }
+            });
+        } catch (error) {
+            // Handle synchronous errors (e.g., extension context invalidated)
+            if (error.message && error.message.includes('Extension context invalidated')) {
+                console.log('Cookie Viewer: Extension context invalidated, stopping monitoring');
+                this.stopMonitoring();
+            }
+        }
     }
 
     injectCookieMonitor() {
@@ -187,20 +229,33 @@ class ContentCookieViewer {
         script.remove();
 
         // Listen for messages from the injected script
-        window.addEventListener('message', (event) => {
+        const messageHandler = (event) => {
             if (event.source !== window) return;
+            if (!this.isContextValid) return;
             
             if (event.data.type && event.data.type.includes('COOKIE')) {
                 // Forward cookie-related messages to background script
-                chrome.runtime.sendMessage({
-                    action: 'cookieActivity',
-                    data: event.data,
-                    url: window.location.href
-                }).catch(() => {
-                    // Background script might not be ready, ignore error
-                });
+                try {
+                    chrome.runtime.sendMessage({
+                        action: 'cookieActivity',
+                        data: event.data,
+                        url: window.location.href
+                    }).catch((error) => {
+                        if (error.message && error.message.includes('Extension context invalidated')) {
+                            console.log('Cookie Viewer: Extension context invalidated in cookie activity');
+                            this.stopMonitoring();
+                        }
+                    });
+                } catch (error) {
+                    if (error.message && error.message.includes('Extension context invalidated')) {
+                        console.log('Cookie Viewer: Extension context invalidated in cookie activity');
+                        this.stopMonitoring();
+                    }
+                }
             }
-        });
+        };
+        
+        window.addEventListener('message', messageHandler);
     }
 }
 

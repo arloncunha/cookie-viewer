@@ -110,6 +110,20 @@ class CookieManager {
                     sendResponse({ success: true });
                     break;
 
+                case 'documentCookieChanged':
+                    // Handle cookie change notifications from content script
+                    console.log('Document cookie changed:', message);
+                    this.updateBadgeForActiveTab();
+                    sendResponse({ success: true });
+                    break;
+
+                case 'cookieActivity':
+                    // Handle cookie activity notifications from content script
+                    console.log('Cookie activity detected:', message.data);
+                    this.updateBadgeForActiveTab();
+                    sendResponse({ success: true });
+                    break;
+
                 default:
                     sendResponse({ success: false, error: 'Unknown action' });
             }
