@@ -100,7 +100,7 @@ jobs:
       if: startsWith(github.ref, 'refs/tags/v')
       uses: softprops/action-gh-release@v2
       with:
-        name: "Cookie Viewer Extension ${{ steps.get-version.outputs.tag-version }}"
+        name: "${{ ssteps.get-version.outputs.version }}"
         tag_name: ${{ steps.get-version.outputs.tag-version }}
         files: |
           cookie-viewer-extension-${{ steps.get-version.outputs.version }}.zip
@@ -146,14 +146,14 @@ jobs:
         prerelease: ${{ contains(steps.get-version.outputs.tag-version, 'alpha') || contains(steps.get-version.outputs.tag-version, 'beta') || contains(steps.get-version.outputs.tag-version, 'rc') }}
         token: ${{ secrets.GITHUB_TOKEN }}
         
-    - name: Upload to Chrome Web Store (on tag push)
-      if: startsWith(github.ref, 'refs/tags/v')
-      uses: cardinalby/webext-buildtools-chrome-webstore-upload-action@v1
-      with:
-        extensionId: ${{ secrets.CHROME_EXTENSION_ID }}
-        zipFilePath: 'cookie-viewer-extension.zip'
-        apiClientId: ${{ secrets.CHROME_WEBSTORE_CLIENT_ID }}
-        apiClientSecret: ${{ secrets.CHROME_WEBSTORE_CLIENT_SECRET }}
-        apiRefreshToken: ${{ secrets.CHROME_WEBSTORE_REFRESH_TOKEN }}
-        # Set to true to publish immediately, false to upload as draft
-        publishTarget: 'draft'
+    # - name: Upload to Chrome Web Store (on tag push)
+    #   if: startsWith(github.ref, 'refs/tags/v')
+    #   uses: cardinalby/webext-buildtools-chrome-webstore-upload-action@v1
+    #   with:
+    #     extensionId: ${{ secrets.CHROME_EXTENSION_ID }}
+    #     zipFilePath: 'cookie-viewer-extension.zip'
+    #     apiClientId: ${{ secrets.CHROME_WEBSTORE_CLIENT_ID }}
+    #     apiClientSecret: ${{ secrets.CHROME_WEBSTORE_CLIENT_SECRET }}
+    #     apiRefreshToken: ${{ secrets.CHROME_WEBSTORE_REFRESH_TOKEN }}
+    #     # Set to true to publish immediately, false to upload as draft
+    #     publishTarget: 'draft'
