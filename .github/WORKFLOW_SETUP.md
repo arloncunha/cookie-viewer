@@ -1,6 +1,16 @@
-# Chrome Extension Build Workflow Setup
+# Chrome Extension Release Workflow Setup
 
-This document explains how to configure the GitHub Actions workflow for building and signing your Chrome extension.
+This document explains how to configure the GitHub Actions workflow for building, signing, and releasing your Chrome extension.
+
+## Enhanced Release Features
+
+The workflow now includes:
+- ✅ **Automatic version detection** from `manifest.json`
+- ✅ **Versioned artifacts** with proper naming
+- ✅ **Rich release notes** with installation instructions
+- ✅ **Pre-release support** (alpha, beta, rc versions)
+- ✅ **GitHub release automation** on tag pushes
+- ✅ **Chrome Web Store integration** (optional)
 
 ## Required Repository Secrets
 
@@ -11,6 +21,7 @@ To use this workflow, you need to configure the following secrets in your GitHub
   - Generate using: `openssl genrsa -out key.pem 2048`
   - Then get the private key content: `cat key.pem`
   - Copy the entire content including `-----BEGIN PRIVATE KEY-----` and `-----END PRIVATE KEY-----`
+  - **Important**: Do NOT commit this key to your repository!
 
 ### Optional for Chrome Web Store Publishing
 - `CHROME_EXTENSION_ID`: Your extension's ID from the Chrome Web Store
@@ -37,12 +48,17 @@ The workflow runs on:
 ## Workflow Outputs
 
 ### On Every Run
-- **Artifacts**: `chrome-extension-artifacts` containing:
-  - `cookie-viewer-extension.zip` - Unsigned extension package
-  - `cookie-viewer-extension.crx` - Signed extension file
+- **Artifacts**: `chrome-extension-artifacts-v{version}` containing:
+  - `cookie-viewer-extension-{version}.zip` - Unsigned extension package
+  - `cookie-viewer-extension-{version}.crx` - Signed extension file
+  - Generic versions for compatibility
 
 ### On Tag Push (Release)
-- **GitHub Release**: Automatically created with extension files
+- **GitHub Release**: Automatically created with:
+  - Versioned extension files
+  - Detailed installation instructions
+  - Extension features and metadata
+  - Pre-release detection (alpha, beta, rc)
 - **Chrome Web Store**: Extension uploaded as draft (if secrets configured)
 
 ## Generating a Private Key for CRX Signing
@@ -80,6 +96,7 @@ To enable automatic publishing to Chrome Web Store:
 
 ## Creating a Release
 
+### Standard Release
 To create a release with automatic Chrome Web Store upload:
 
 ```bash
@@ -87,4 +104,42 @@ git tag v1.0.0
 git push origin v1.0.0
 ```
 
-This will trigger the release workflow that creates a GitHub release and uploads to Chrome Web Store.
+### Pre-release (Beta/Alpha)
+For pre-releases, use version tags with identifiers:
+
+```bash
+# Beta release
+git tag v1.1.0-beta.1
+git push origin v1.1.0-beta.1
+
+# Alpha release  
+git tag v1.2.0-alpha.1
+git push origin v1.2.0-alpha.1
+
+# Release candidate
+git tag v1.0.0-rc.1
+git push origin v1.0.0-rc.1
+```
+
+Pre-releases are automatically marked as such in GitHub releases.
+
+### Version Management
+- The workflow automatically extracts the version from `extension/manifest.json`
+- Artifacts are named with the version: `cookie-viewer-extension-{version}.zip`
+- Release notes include version information and build metadata
+
+## Validating Your Setup
+
+Run the validation script to check your configuration:
+
+```bash
+node .github/validate-release-workflow.js
+```
+
+This script will:
+- ✅ Check all required files exist
+- ✅ Validate manifest.json format
+- ✅ Verify workflow configuration
+- ✅ Check security (no private keys in repo)
+- ✅ Validate .gitignore settings
+- ✅ Provide next steps guidance
