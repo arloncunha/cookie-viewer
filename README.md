@@ -170,48 +170,14 @@ node test_extension_functionality.js
 # - Verify cookie clearing operations
 ```
 
-### Contributing
-We welcome contributions! Please follow these steps:
-
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
-3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
-4. **Push** to the branch (`git push origin feature/amazing-feature`)
-5. **Open** a Pull Request
-
-### Code Style
-- Use consistent indentation (2 spaces)
-- Follow JavaScript ES6+ standards
-- Add comments for complex functionality
-- Ensure responsive CSS design
-- Test across different screen sizes
-
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for complete details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## ⚠️ Disclaimer
 
-This tool is intended for legitimate purposes including:
-- Web development and debugging
-- Security research and analysis
-- Educational and learning purposes
-- Privacy auditing and compliance
+This tool is intended for legitimate purposes including web development, debugging, security research, and educational use. Users are responsible for ensuring compliance with applicable laws, website terms of service, and privacy policies.
 
-**Important**: Users are responsible for ensuring their use complies with:
-- Applicable laws and regulations
-- Website terms of service
-- Privacy policies and data protection requirements
-- Ethical guidelines for security research
+## 🐛 Issues
 
-## 🤝 Support
-
-- **Issues**: Report bugs or request features via [GitHub Issues](https://github.com/arloncunha/cookie-viewer/issues)
-- **Documentation**: Comprehensive guides available in this README
-- **Community**: Join discussions in the repository's discussion section
-
----
-
-<div align="center">
-  <strong>Built with ❤️ for the web development community</strong>
-</div>
+Found a bug or have a feature request? Please report it via [GitHub Issues](https://github.com/arloncunha/cookie-viewer/issues).
