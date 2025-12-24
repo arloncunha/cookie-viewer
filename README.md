@@ -1,8 +1,8 @@
 # Cookie Viewer Chrome Extension
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-blue.svg)](https://developer.chrome.com/docs/extensions/)
+[![Build Chrome Extension](https://github.com/arloncunha/cookie-viewer/actions/workflows/build-and-sign.yml/badge.svg?branch=main)](https://github.com/arloncunha/cookie-viewer/actions/workflows/build-and-sign.yml)
 [![Manifest V3](https://img.shields.io/badge/Manifest-V3-green.svg)](https://developer.chrome.com/docs/extensions/mv3/intro/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A powerful Chrome extension that provides comprehensive cookie viewing and management capabilities for any website, including access to HTTP-only cookies that are normally inaccessible to regular JavaScript.
 
