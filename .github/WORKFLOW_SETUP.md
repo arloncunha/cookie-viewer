@@ -12,16 +12,9 @@ The workflow now includes:
 - ✅ **GitHub release automation** on tag pushes
 - ✅ **Chrome Web Store integration** (optional)
 
-## Required Repository Secrets
+## Optional Repository Secrets
 
-To use this workflow, you need to configure the following secrets in your GitHub repository:
-
-### Required for CRX Signing
-- `CHROME_EXTENSION_PRIVATE_KEY`: The private key used to sign your Chrome extension CRX file
-  - Generate using: `openssl genrsa -out key.pem 2048`
-  - Then get the private key content: `cat key.pem`
-  - Copy the entire content including `-----BEGIN PRIVATE KEY-----` and `-----END PRIVATE KEY-----`
-  - **Important**: Do NOT commit this key to your repository!
+For Chrome Web Store publishing, you can configure the following secrets in your GitHub repository:
 
 ### Optional for Chrome Web Store Publishing
 - `CHROME_EXTENSION_ID`: Your extension's ID from the Chrome Web Store
@@ -49,8 +42,7 @@ The workflow runs on:
 
 ### On Every Run
 - **Artifacts**: `chrome-extension-artifacts-v{version}` containing:
-  - `cookie-viewer-extension-{version}.zip` - Unsigned extension package
-  - `cookie-viewer-extension-{version}.crx` - Signed extension file
+  - `cookie-viewer-extension-{version}.zip` - Extension package for manual installation
   - Generic versions for compatibility
 
 ### On Tag Push (Release)
@@ -60,21 +52,6 @@ The workflow runs on:
   - Extension features and metadata
   - Pre-release detection (alpha, beta, rc)
 - **Chrome Web Store**: Extension uploaded as draft (if secrets configured)
-
-## Generating a Private Key for CRX Signing
-
-```bash
-# Generate a private key
-openssl genrsa -out extension-key.pem 2048
-
-# Extract the public key (for reference)
-openssl rsa -in extension-key.pem -pubout -out extension-public.pem
-
-# View the private key content to copy to GitHub secrets
-cat extension-key.pem
-```
-
-**Important**: Keep your private key secure and never commit it to your repository!
 
 ## Chrome Web Store API Setup (Optional)
 
@@ -92,7 +69,7 @@ To enable automatic publishing to Chrome Web Store:
 1. Make a change to your extension
 2. Commit and push to trigger the workflow
 3. Check the Actions tab to see the workflow run
-4. Download the artifacts to test the signed CRX file
+4. Download the artifacts to test the extension package
 
 ## Creating a Release
 

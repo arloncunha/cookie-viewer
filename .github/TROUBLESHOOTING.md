@@ -52,26 +52,6 @@ Your organization may have restrictions on GitHub Actions.
 - Check if third-party actions are allowed
 
 
-### CRX Signing Failed
-
-**Error Message:**
-```
-Error: Private key is required
-```
-
-**Solution:**
-1. Generate a private key:
-   ```bash
-   openssl genrsa -out extension-key.pem 2048
-   ```
-
-2. Add the private key to GitHub Secrets:
-   - Go to Settings → Secrets and variables → Actions
-   - Click "New repository secret"
-   - Name: `CHROME_EXTENSION_PRIVATE_KEY`
-   - Value: Copy the entire content of the .pem file (including headers)
-
-3. **Important:** Do NOT commit the .pem file to your repository!
 
 ### Workflow Not Triggering
 
@@ -196,8 +176,7 @@ cd ..
 ### 4. Verify Secrets
 Check that all required secrets are set:
 - Go to Settings → Secrets and variables → Actions
-- Verify these secrets exist:
-  - `CHROME_EXTENSION_PRIVATE_KEY` (required)
+- Verify these secrets exist (if using Chrome Web Store):
   - `CHROME_EXTENSION_ID` (optional)
   - `CHROME_WEBSTORE_CLIENT_ID` (optional)
   - `CHROME_WEBSTORE_CLIENT_SECRET` (optional)
@@ -216,13 +195,7 @@ zip -r ../cookie-viewer-extension.zip .
 cd ..
 ```
 
-### 2. Sign Extension (if you have the private key)
-```bash
-# This requires Chrome or chromium-browser installed
-# Alternative: Use online CRX packaging tools
-```
-
-### 3. Create GitHub Release
+### 2. Create GitHub Release
 1. Go to your repository
 2. Click "Releases"
 3. Click "Create a new release"
@@ -282,7 +255,6 @@ If you need to retry a failed release:
 Before creating a release, ensure:
 - [ ] Extension files are complete and valid
 - [ ] Manifest.json version is updated
-- [ ] Private key secret is configured
 - [ ] Repository has write permissions for Actions
 - [ ] Tag format is correct (starts with 'v')
 - [ ] Validation script passes

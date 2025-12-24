@@ -1,4 +1,4 @@
-name: Build and Sign Chrome Extension
+name: Build Chrome Extension
 
 on:
   push:
@@ -14,7 +14,7 @@ permissions:
   checks: write
 
 jobs:
-  build-and-sign:
+  build:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -73,27 +73,12 @@ jobs:
         # Also create a generic named version for compatibility
         cp cookie-viewer-extension-${{ steps.get-version.outputs.version }}.zip cookie-viewer-extension.zip
         
-    - name: Sign Chrome Extension
-      uses: cardinalby/webext-buildtools-chrome-crx-action@v2
-      with:
-        # Path to the ZIP file of the extension
-        zipFilePath: 'cookie-viewer-extension.zip'
-        # Private key for signing (stored as repository secret)
-        privateKey: ${{ secrets.CHROME_EXTENSION_PRIVATE_KEY }}
-        # Output path for the signed CRX file with version
-        crxFilePath: 'cookie-viewer-extension-${{ steps.get-version.outputs.version }}.crx'
-        
-    - name: Create generic CRX for compatibility
-      run: |
-        cp cookie-viewer-extension-${{ steps.get-version.outputs.version }}.crx cookie-viewer-extension.crx
-        
     - name: Upload Extension Artifacts
       uses: actions/upload-artifact@v4
       with:
         name: chrome-extension-artifacts-v${{ steps.get-version.outputs.version }}
         path: |
           cookie-viewer-extension*.zip
-          cookie-viewer-extension*.crx
         retention-days: 30
         
     - name: Create Release (on tag push)
@@ -104,13 +89,11 @@ jobs:
         tag_name: ${{ steps.get-version.outputs.tag-version }}
         files: |
           cookie-viewer-extension-${{ steps.get-version.outputs.version }}.zip
-          cookie-viewer-extension-${{ steps.get-version.outputs.version }}.crx
         body: |
           ## Cookie Viewer Extension ${{ steps.get-version.outputs.tag-version }}
           
           ### 📦 Installation Files
-          - **cookie-viewer-extension-${{ steps.get-version.outputs.version }}.zip** - Unsigned extension package for Chrome Web Store or manual installation
-          - **cookie-viewer-extension-${{ steps.get-version.outputs.version }}.crx** - Signed extension file for direct installation
+          - **cookie-viewer-extension-${{ steps.get-version.outputs.version }}.zip** - Extension package for manual installation
           
           ### 🚀 Installation Instructions
           
@@ -123,12 +106,6 @@ jobs:
           3. Open Chrome and go to `chrome://extensions/`
           4. Enable "Developer mode" in the top right
           5. Click "Load unpacked" and select the extracted folder
-          
-          #### Method 3: Direct CRX Installation
-          1. Download the `cookie-viewer-extension-${{ steps.get-version.outputs.version }}.crx` file
-          2. Open Chrome and go to `chrome://extensions/`
-          3. Enable "Developer mode" in the top right
-          4. Drag and drop the CRX file onto the extensions page
           
           ### 🔧 Extension Features
           - View and debug cookies for any website

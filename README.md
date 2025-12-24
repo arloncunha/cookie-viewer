@@ -10,6 +10,23 @@ A powerful Chrome extension that provides comprehensive cookie viewing and manag
 
 ## 🚀 Quick Start
 
+> **Note:** This extension is currently distributed through GitHub releases. Chrome Web Store publication is planned for future releases.
+
+### Option 1: Download ZIP from Releases (Recommended)
+
+1. **Download the latest release**
+   - Visit [GitHub Releases](https://github.com/arloncunha/cookie-viewer/releases/latest)
+   - Download the `cookie-viewer-extension.zip` file
+   - Extract the ZIP file to a folder on your computer
+
+2. **Install the extension**
+   - Open Chrome and navigate to `chrome://extensions/`
+   - Enable "Developer mode" (toggle in top right)
+   - Click "Load unpacked" and select the extracted `extension` folder
+   - The Cookie Viewer extension will appear in your toolbar
+
+### Option 2: Build from Source
+
 1. **Clone the repository**
    ```bash
    git clone https://github.com/arloncunha/cookie-viewer.git

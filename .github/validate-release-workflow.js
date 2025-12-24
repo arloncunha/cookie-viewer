@@ -73,7 +73,6 @@ try {
   
   // Check for required secrets references
   const requiredSecrets = [
-    'CHROME_EXTENSION_PRIVATE_KEY',
     'GITHUB_TOKEN'
   ];
   
@@ -127,7 +126,7 @@ if (!foundPrivateKey) {
 console.log('\n🚫 Checking .gitignore:');
 if (fs.existsSync('.gitignore')) {
   const gitignoreContent = fs.readFileSync('.gitignore', 'utf8');
-  const shouldIgnore = ['*.pem', '*.crx', 'build/', 'dist/'];
+  const shouldIgnore = ['*.pem', 'build/', 'dist/'];
   
   shouldIgnore.forEach(pattern => {
     if (gitignoreContent.includes(pattern)) {
@@ -142,16 +141,15 @@ if (fs.existsSync('.gitignore')) {
 
 console.log('\n🎯 Release Workflow Summary:');
 console.log('  • Workflow triggers on: push to main/master, tags (v*), PRs, manual dispatch');
-console.log('  • Creates versioned artifacts: cookie-viewer-extension-{version}.zip/.crx');
+console.log('  • Creates versioned artifacts: cookie-viewer-extension-{version}.zip');
 console.log('  • Uploads artifacts to GitHub Actions for every build');
 console.log('  • Creates GitHub releases automatically when you push version tags');
 console.log('  • Supports pre-releases (alpha, beta, rc versions)');
 console.log('  • Includes detailed installation instructions in release notes');
 
 console.log('\n📝 Next Steps:');
-console.log('  1. Ensure CHROME_EXTENSION_PRIVATE_KEY is set in GitHub repository secrets');
-console.log('  2. To create a release, push a version tag: git tag v1.0.0 && git push origin v1.0.0');
-console.log('  3. Optional: Configure Chrome Web Store secrets for automatic publishing');
-console.log('  4. Test the workflow by pushing changes or creating a tag');
+console.log('  1. To create a release, push a version tag: git tag v1.0.0 && git push origin v1.0.0');
+console.log('  2. Optional: Configure Chrome Web Store secrets for automatic publishing');
+console.log('  3. Test the workflow by pushing changes or creating a tag');
 
 console.log('\n✅ Workflow validation completed!');

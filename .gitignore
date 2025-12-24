@@ -31,7 +31,6 @@ build/
 *.zip
 
 # Chrome extension specific
-*.crx
 *.pem
 key.pem
 

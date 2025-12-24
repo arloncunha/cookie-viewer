@@ -27,8 +27,8 @@ git push origin v1.1.0
 
 ### 3. Automatic Release Process
 The workflow will automatically:
-- ✅ Build and sign your extension
-- ✅ Create versioned artifacts (`cookie-viewer-extension-1.1.0.zip`, `cookie-viewer-extension-1.1.0.crx`)
+- ✅ Build your extension
+- ✅ Create versioned artifacts (`cookie-viewer-extension-1.1.0.zip`)
 - ✅ Create a GitHub release with detailed installation instructions
 - ✅ Upload to Chrome Web Store as draft (if configured)
 
@@ -67,8 +67,7 @@ Creates a release candidate for final testing
 Each release includes:
 
 ### 📦 Extension Files
-- **`cookie-viewer-extension-{version}.zip`** - Unsigned package for Chrome Web Store
-- **`cookie-viewer-extension-{version}.crx`** - Signed extension for direct installation
+- **`cookie-viewer-extension-{version}.zip`** - Extension package for manual installation
 
 ### 📋 Release Notes
 Automatically generated with:
@@ -82,7 +81,7 @@ If configured, the extension is automatically uploaded as a draft to the Chrome 
 
 ## Installation Methods for Users
 
-Your releases will include instructions for three installation methods:
+Your releases will include instructions for two installation methods:
 
 ### Method 1: Chrome Web Store (Recommended)
 Direct installation from the Chrome Web Store (if published).
@@ -91,10 +90,6 @@ Direct installation from the Chrome Web Store (if published).
 1. Download the ZIP file
 2. Extract to a folder
 3. Load unpacked in Chrome extensions
-
-### Method 3: Direct Installation (CRX)
-1. Download the CRX file
-2. Drag and drop onto Chrome extensions page
 
 ## Validation Before Release
 
@@ -116,11 +111,6 @@ This ensures:
 - ✅ Check that you pushed the tag: `git push origin v1.0.0`
 - ✅ Verify tag format starts with 'v': `v1.0.0` not `1.0.0`
 - ✅ Check GitHub Actions tab for workflow errors
-
-### CRX Signing Failed
-- ✅ Ensure `CHROME_EXTENSION_PRIVATE_KEY` secret is set
-- ✅ Verify private key format includes headers/footers
-- ✅ Check that key.pem is not committed to repository
 
 ### Chrome Web Store Upload Failed
 - ✅ Verify all Chrome Web Store secrets are configured
